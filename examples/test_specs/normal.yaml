@@ -1,0 +1,17 @@
+version: "1.0"
+name: demo-normal-api
+
+request:
+  method: GET
+  url: http://127.0.0.1:8001/api/normal
+
+load:
+  threads: 10
+  ramp_up_seconds: 5
+  duration_seconds: 60
+
+acceptance:
+  min_rps: 1.0
+  min_samples: 10
+  p95_ms: 500.0
+  success_rate: 99.9
