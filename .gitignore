@@ -219,3 +219,7 @@ __marimo__/
 
 # PyCharm
 .idea/
+
+# AI Performance Lab runtime artifacts
+runs/*
+!runs/.gitkeep
