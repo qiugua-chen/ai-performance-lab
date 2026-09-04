@@ -9,6 +9,12 @@ from ai_performance_lab.executors import (
     JMeterTimeoutError,
     execute_jmeter,
 )
+from ai_performance_lab.runs import (
+    RunArtifactError,
+    create_run_artifacts,
+    stage_run_inputs,
+    write_run_manifest,
+)
 from ai_performance_lab.test_spec.loader import (
     TestSpecError,
     load_test_spec,
@@ -17,7 +23,7 @@ from ai_performance_lab.test_spec.loader import (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Execute the deterministic M0 JMeter template."
+        description="Execute JMeter inside an isolated M0 Run directory."
     )
 
     parser.add_argument(
@@ -28,7 +34,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--jmeter",
         required=True,
-        help="Path to jmeter.bat, jmeter, or a command available on PATH.",
+        help="Path to jmeter.bat, jmeter, or a command on PATH.",
     )
     parser.add_argument(
         "--template",
@@ -41,14 +47,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="Path to the fixed JTL save properties.",
     )
     parser.add_argument(
-        "--jtl",
-        required=True,
-        help="New path for the JTL result file.",
-    )
-    parser.add_argument(
-        "--log",
-        required=True,
-        help="New path for the JMeter execution log.",
+        "--runs-root",
+        default="runs",
+        help="Root directory used to store isolated Runs.",
     )
     parser.add_argument(
         "--timeout-seconds",
@@ -64,34 +65,74 @@ def main() -> int:
     args = build_parser().parse_args()
 
     try:
-        spec = load_test_spec(args.spec)
+        artifacts = create_run_artifacts(args.runs_root)
+    except (RunArtifactError, ValueError, OSError) as error:
+        print("RUN_CREATION_ERROR")
+        print(error)
+        return 7
+
+    print(f"run_id={artifacts.run_id}")
+    print(f"run_directory={artifacts.directory}")
+
+    try:
+        stage_run_inputs(
+            artifacts=artifacts,
+            test_spec_source=args.spec,
+            test_plan_source=args.template,
+            result_properties_source=args.result_properties,
+        )
+
+        spec = load_test_spec(artifacts.test_spec_path)
 
         result = execute_jmeter(
             spec=spec,
             jmeter_command=args.jmeter,
-            template_path=args.template,
-            result_properties_path=args.result_properties,
-            jtl_path=args.jtl,
-            log_path=args.log,
+            template_path=artifacts.test_plan_path,
+            result_properties_path=artifacts.result_properties_path,
+            jtl_path=artifacts.jtl_path,
+            log_path=artifacts.jmeter_log_path,
             timeout_seconds=args.timeout_seconds,
         )
 
     except TestSpecError as error:
+        write_run_manifest(
+            artifacts,
+            status="INVALID_SPEC",
+            details={"error": str(error), "exit_code": 2},
+        )
         print("INVALID_SPEC")
         print(error)
         return 2
 
     except JMeterCommandNotFoundError as error:
+        write_run_manifest(
+            artifacts,
+            status="COMMAND_NOT_FOUND",
+            details={"error": str(error), "exit_code": 3},
+        )
         print("COMMAND_NOT_FOUND")
         print(error)
         return 3
 
     except JMeterTimeoutError as error:
+        write_run_manifest(
+            artifacts,
+            status="TIMEOUT",
+            details={"error": str(error), "exit_code": 4},
+        )
         print("TIMEOUT")
         print(error)
         return 4
 
     except JMeterProcessError as error:
+        write_run_manifest(
+            artifacts,
+            status="EXECUTION_FAILED",
+            details={
+                "error": str(error),
+                "exit_code": error.exit_code,
+            },
+        )
         print("EXECUTION_FAILED")
         print(f"exit_code={error.exit_code}")
 
@@ -105,10 +146,24 @@ def main() -> int:
 
         return 5
 
-    except JMeterExecutionError as error:
+    except (JMeterExecutionError, RunArtifactError) as error:
+        write_run_manifest(
+            artifacts,
+            status="EXECUTION_ERROR",
+            details={"error": str(error), "exit_code": 6},
+        )
         print("EXECUTION_ERROR")
         print(error)
         return 6
+
+    write_run_manifest(
+        artifacts,
+        status="SUCCESS",
+        details={
+            "exit_code": result.exit_code,
+            "elapsed_seconds": round(result.elapsed_seconds, 3),
+        },
+    )
 
     print("SUCCESS")
     print(f"exit_code={result.exit_code}")
