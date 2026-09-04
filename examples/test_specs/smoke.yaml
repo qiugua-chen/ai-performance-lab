@@ -1,0 +1,17 @@
+version: "1.0"
+name: "demo-normal-smoke"
+
+request:
+  method: "GET"
+  url: "http://127.0.0.1:8001/api/normal"
+
+load:
+  threads: 1
+  ramp_up_seconds: 1
+  duration_seconds: 3
+
+acceptance:
+  min_rps: 0.1
+  min_samples: 1
+  p95_ms: 1000
+  success_rate: 1.0
