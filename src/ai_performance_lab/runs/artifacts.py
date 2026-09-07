@@ -44,6 +44,8 @@ class RunArtifacts:
     jtl_path: Path
     jmeter_log_path: Path
     manifest_path: Path
+    evaluation_path: Path
+    metrics_path: Path
 
 
 def generate_run_id(
@@ -106,6 +108,8 @@ def create_run_artifacts(
         jtl_path=run_directory / "result.jtl",
         jmeter_log_path=run_directory / "jmeter.log",
         manifest_path=run_directory / "run.json",
+        metrics_path=run_directory / "metrics.json",
+        evaluation_path=run_directory / "evaluation.json",
     )
 
 
@@ -176,6 +180,8 @@ def write_run_manifest(
             "result_properties": artifacts.result_properties_path.name,
             "jtl": artifacts.jtl_path.name,
             "jmeter_log": artifacts.jmeter_log_path.name,
+            "metrics": artifacts.metrics_path.name,
+            "evaluation": artifacts.evaluation_path.name,
         },
         "details": details or {},
     }
