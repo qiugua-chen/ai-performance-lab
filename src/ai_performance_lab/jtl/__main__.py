@@ -12,12 +12,12 @@ from ai_performance_lab.jtl import (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Parse and validate one CSV JMeter JTL file."
+        description="解析并校验一个 CSV 格式的 JMeter JTL 文件。"
     )
 
     parser.add_argument(
         "jtl_path",
-        help="Path to the CSV JTL file.",
+        help="CSV 格式的 JTL 文件路径。",
     )
 
     return parser

@@ -23,39 +23,39 @@ from ai_performance_lab.test_spec.loader import (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Execute JMeter inside an isolated M0 Run directory."
+        description="在独立的 M0 运行目录中执行 JMeter。"
     )
 
     parser.add_argument(
         "--spec",
         required=True,
-        help="Path to the Test Spec YAML file.",
+        help="YAML 测试规格文件的路径。",
     )
     parser.add_argument(
         "--jmeter",
         required=True,
-        help="Path to jmeter.bat, jmeter, or a command on PATH.",
+        help="jmeter.bat、jmeter 的路径，或 PATH 中可用的命令。",
     )
     parser.add_argument(
         "--template",
         default="jmeter/templates/http_get.jmx",
-        help="Path to the deterministic JMeter template.",
+        help="固定的 JMeter 模板文件路径。",
     )
     parser.add_argument(
         "--result-properties",
         default="jmeter/config/jtl-save.properties",
-        help="Path to the fixed JTL save properties.",
+        help="固定的 JTL 输出配置文件路径。",
     )
     parser.add_argument(
         "--runs-root",
         default="runs",
-        help="Root directory used to store isolated Runs.",
+        help="用于保存各次独立运行的根目录。",
     )
     parser.add_argument(
         "--timeout-seconds",
         required=True,
         type=float,
-        help="Maximum JMeter process execution time.",
+        help="JMeter 进程执行超时时限，单位为秒。",
     )
 
     return parser

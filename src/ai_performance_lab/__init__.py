@@ -1,1 +1,1 @@
-"""Core package for AI Performance Lab."""
+"""AI Performance Lab 的核心包。"""

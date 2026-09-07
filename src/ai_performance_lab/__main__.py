@@ -19,7 +19,7 @@ from ai_performance_lab.test_spec.loader import TestSpecError
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="AI Performance Lab deterministic M0 workflow."
+        description="AI Performance Lab M0 执行与评估工作流。"
     )
 
     subparsers = parser.add_subparsers(
@@ -29,39 +29,39 @@ def build_parser() -> argparse.ArgumentParser:
 
     run_parser = subparsers.add_parser(
         "run",
-        help="Execute one complete deterministic M0 Run.",
+        help="执行一次完整的 M0 工作流。",
     )
 
     run_parser.add_argument(
         "--spec",
         required=True,
-        help="Path to the Test Spec YAML file.",
+        help="YAML 测试规格文件的路径。",
     )
     run_parser.add_argument(
         "--jmeter",
         required=True,
-        help="Path to jmeter.bat, jmeter, or a command on PATH.",
+        help="jmeter.bat、jmeter 的路径，或 PATH 中可用的命令。",
     )
     run_parser.add_argument(
         "--template",
         default="jmeter/templates/http_get.jmx",
-        help="Path to the deterministic JMeter template.",
+        help="固定的 JMeter 模板文件路径。",
     )
     run_parser.add_argument(
         "--result-properties",
         default="jmeter/config/jtl-save.properties",
-        help="Path to the fixed JTL properties file.",
+        help="固定的 JTL 输出配置文件路径。",
     )
     run_parser.add_argument(
         "--runs-root",
         default="runs",
-        help="Root directory for isolated Run artifacts.",
+        help="用于保存独立运行产物的根目录。",
     )
     run_parser.add_argument(
         "--timeout-seconds",
         type=float,
         default=30,
-        help="Maximum JMeter execution time.",
+        help="JMeter 执行超时时限，单位为秒。",
     )
 
     return parser

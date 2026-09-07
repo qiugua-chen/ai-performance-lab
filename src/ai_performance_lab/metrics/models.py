@@ -6,7 +6,7 @@ from typing import Any
 
 @dataclass(frozen=True)
 class PerformanceMetrics:
-    """Deterministic metrics calculated from validated JTL samples."""
+    """根据已校验的 JTL 样本计算得到的确定性指标。"""
 
     request_count: int
     success_count: int

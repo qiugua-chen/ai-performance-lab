@@ -13,15 +13,15 @@ from ai_performance_lab.test_spec.models import TestSpec
 
 
 class JMeterExecutionError(RuntimeError):
-    """Base exception for JMeter execution failures."""
+    """JMeter 执行失败的异常基类。"""
 
 
 class JMeterCommandNotFoundError(JMeterExecutionError):
-    """Raised when the configured JMeter command does not exist."""
+    """配置的 JMeter 命令不存在时抛出此异常。"""
 
 
 class JMeterTimeoutError(JMeterExecutionError):
-    """Raised when JMeter exceeds the configured timeout."""
+    """JMeter 执行超过配置的超时时限时抛出此异常。"""
 
     def __init__(self, timeout_seconds: float) -> None:
         self.timeout_seconds = timeout_seconds
@@ -31,7 +31,7 @@ class JMeterTimeoutError(JMeterExecutionError):
 
 
 class JMeterProcessError(JMeterExecutionError):
-    """Raised when JMeter exits with a non-zero status."""
+    """JMeter 以非零状态码退出时抛出此异常。"""
 
     def __init__(
         self,
@@ -46,12 +46,12 @@ class JMeterProcessError(JMeterExecutionError):
 
 
 class JMeterOutputError(JMeterExecutionError):
-    """Raised when expected JMeter output files are missing."""
+    """预期的 JMeter 输出文件缺失时抛出此异常。"""
 
 
 @dataclass(frozen=True)
 class JMeterExecutionResult:
-    """Successful JMeter execution result."""
+    """JMeter 执行成功的结果。"""
 
     command: tuple[str, ...]
     exit_code: int
@@ -63,7 +63,7 @@ class JMeterExecutionResult:
 
 
 def resolve_jmeter_command(command: str | Path) -> Path:
-    """Resolve an explicit path or a command available on PATH."""
+    """解析显式指定的路径或 PATH 中可用的命令。"""
 
     command_text = str(command)
     explicit_path = Path(command_text).expanduser()
@@ -92,7 +92,7 @@ def build_jmeter_command(
     response_timeout_ms: int = 10000,
     expected_status: int = 200,
 ) -> list[str]:
-    """Translate a Test Spec into a deterministic JMeter command."""
+    """根据测试规格构造 JMeter 命令及参数。"""
 
     resolved_jmeter = resolve_jmeter_command(jmeter_command)
     resolved_template = Path(template_path).resolve()
@@ -152,7 +152,7 @@ def build_jmeter_command(
 
 
 def _terminate_process_tree(process: subprocess.Popen[str]) -> None:
-    """Terminate JMeter and child processes after a timeout."""
+    """超时后终止 JMeter 及其子进程。"""
 
     if os.name == "nt":
         subprocess.run(
@@ -187,7 +187,7 @@ def execute_jmeter(
     log_path: str | Path,
     timeout_seconds: float,
 ) -> JMeterExecutionResult:
-    """Execute JMeter and return a successful result or typed exception."""
+    """执行 JMeter，成功时返回结果，失败时抛出对应类型的异常。"""
 
     resolved_jtl = Path(jtl_path).resolve()
     resolved_log = Path(log_path).resolve()

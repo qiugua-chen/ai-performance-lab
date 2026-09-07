@@ -8,22 +8,22 @@ from ai_performance_lab.metrics.models import PerformanceMetrics
 
 
 class MetricsCalculationError(RuntimeError):
-    """Base exception for deterministic metric calculation failures."""
+    """确定性指标计算失败的异常基类。"""
 
 
 class MetricsEmptyError(MetricsCalculationError):
-    """Raised when no samples are available."""
+    """没有可用样本时抛出此异常。"""
 
 
 class MetricsInvalidWindowError(MetricsCalculationError):
-    """Raised when the observed execution window is not positive."""
+    """观测到的执行时间窗口时长不为正值时抛出此异常。"""
 
 
 def nearest_rank_percentile(
     values: Sequence[int],
     percentile: float,
 ) -> int:
-    """Calculate one percentile using the nearest-rank method."""
+    """使用最近秩法（nearest-rank）计算指定百分位数。"""
 
     if not values:
         raise MetricsEmptyError(
@@ -45,7 +45,7 @@ def nearest_rank_percentile(
 def calculate_metrics(
     samples: Sequence[JTLSample],
 ) -> PerformanceMetrics:
-    """Calculate deterministic M0 metrics from validated JTL samples."""
+    """根据已校验的 JTL 样本计算确定性的 M0 指标。"""
 
     if not samples:
         raise MetricsEmptyError(

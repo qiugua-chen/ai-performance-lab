@@ -23,25 +23,24 @@ from ai_performance_lab.test_spec.loader import (
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Evaluate deterministic metrics against "
-            "one Test Spec."
+            "依据测试规格评估性能指标。"
         )
     )
 
     parser.add_argument(
         "--spec",
         required=True,
-        help="Path to the Test Spec YAML file.",
+        help="YAML 测试规格文件的路径。",
     )
     parser.add_argument(
         "--metrics",
         required=True,
-        help="Path to metrics.json.",
+        help="metrics.json 文件路径。",
     )
     parser.add_argument(
         "--output",
         required=True,
-        help="New path for evaluation.json.",
+        help="evaluation.json 输出路径，目标文件必须尚不存在。",
     )
 
     return parser

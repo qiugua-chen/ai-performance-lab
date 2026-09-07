@@ -7,18 +7,18 @@ from ai_performance_lab.rules.models import EvaluationResult
 
 
 class EvaluationOutputError(RuntimeError):
-    """Base exception for evaluation output failures."""
+    """评估结果输出失败的异常基类。"""
 
 
 class EvaluationOutputExistsError(EvaluationOutputError):
-    """Raised when evaluation.json already exists."""
+    """evaluation.json 已存在时抛出此异常。"""
 
 
 def write_evaluation_json(
     result: EvaluationResult,
     output_path: str | Path,
 ) -> Path:
-    """Write an immutable evaluation artifact."""
+    """写入评估结果文件；若文件已存在，则拒绝覆盖。"""
 
     resolved_path = Path(output_path).resolve()
     resolved_path.parent.mkdir(

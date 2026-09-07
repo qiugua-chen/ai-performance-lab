@@ -6,7 +6,7 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class JTLSample:
-    """One parsed JMeter sample."""
+    """一条已解析的 JMeter 样本。"""
 
     timestamp_ms: int
     elapsed_ms: int
@@ -17,7 +17,7 @@ class JTLSample:
 
 @dataclass(frozen=True)
 class JTLDocument:
-    """A parsed JTL file and all validated samples."""
+    """已解析的 JTL 文件及其全部已校验样本。"""
 
     source_path: Path
     samples: tuple[JTLSample, ...]

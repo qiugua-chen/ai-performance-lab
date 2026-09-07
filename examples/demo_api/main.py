@@ -6,14 +6,14 @@ from fastapi import FastAPI, HTTPException, Query
 
 app = FastAPI(
     title="AI Performance Lab Demo API",
-    description="A deterministic and controllable API target for M0.",
+    description="用于 M0 验证、行为可控的被测 API 服务。",
     version="0.0.0",
 )
 
 
 @app.get("/api/health")
 async def health() -> dict[str, str]:
-    """Return the service health status."""
+    """返回服务健康状态。"""
 
     return {
         "status": "ok",
@@ -22,7 +22,7 @@ async def health() -> dict[str, str]:
 
 @app.get("/api/normal")
 async def normal() -> dict[str, str]:
-    """Return a deterministic successful response."""
+    """返回确定的成功响应。"""
 
     return {
         "mode": "normal",
@@ -37,11 +37,11 @@ async def slow(
         Query(
             ge=0,
             le=5000,
-            description="Controlled response delay in milliseconds.",
+            description="响应延迟，单位为毫秒。",
         ),
     ] = 500,
 ) -> dict[str, int | str]:
-    """Return a successful response after a controlled delay."""
+    """经过指定延迟后返回成功响应。"""
 
     await asyncio.sleep(delay_ms / 1000)
 
@@ -58,11 +58,11 @@ async def error(
         Query(
             ge=400,
             le=599,
-            description="Controlled HTTP error status code.",
+            description="指定返回的 HTTP 错误状态码。",
         ),
     ] = 500,
 ):
-    """Return a controlled HTTP error response."""
+    """返回可控的 HTTP 错误响应。"""
 
     raise HTTPException(
         status_code=status_code,

@@ -8,11 +8,11 @@ from ai_performance_lab.test_spec.models import TestSpec
 
 
 class TestSpecError(ValueError):
-    """Raised when a Test Spec file cannot be loaded or validated."""
+    """无法加载测试规格文件或校验失败时抛出此异常。"""
 
 
 def load_test_spec(path: str | Path) -> TestSpec:
-    """Load and validate a Test Spec YAML file."""
+    """加载并校验 YAML 测试规格文件。"""
 
     spec_path = Path(path)
 

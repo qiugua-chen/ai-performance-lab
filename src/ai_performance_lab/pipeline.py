@@ -27,7 +27,7 @@ from ai_performance_lab.test_spec.loader import load_test_spec
 
 @dataclass(frozen=True)
 class M0PipelineResult:
-    """Completed M0 pipeline result."""
+    """已完成的 M0 流水线执行结果。"""
 
     artifacts: RunArtifacts
     metrics: PerformanceMetrics
@@ -44,7 +44,7 @@ def run_m0_pipeline(
     runs_root: str | Path,
     timeout_seconds: float,
 ) -> M0PipelineResult:
-    """Run the complete deterministic M0 workflow."""
+    """执行 M0 测试、指标计算与规则评估流程。"""
 
     artifacts = create_run_artifacts(runs_root)
 
