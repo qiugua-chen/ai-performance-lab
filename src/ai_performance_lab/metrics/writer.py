@@ -7,18 +7,18 @@ from ai_performance_lab.metrics.models import PerformanceMetrics
 
 
 class MetricsOutputError(RuntimeError):
-    """Base exception for metrics output failures."""
+    """指标输出失败的异常基类。"""
 
 
 class MetricsOutputExistsError(MetricsOutputError):
-    """Raised when metrics.json already exists."""
+    """metrics.json 已存在时抛出此异常。"""
 
 
 def write_metrics_json(
     metrics: PerformanceMetrics,
     output_path: str | Path,
 ) -> Path:
-    """Write metrics without overwriting an existing artifact."""
+    """写入指标，且不覆盖已有产物。"""
 
     resolved_path = Path(output_path).resolve()
     resolved_path.parent.mkdir(parents=True, exist_ok=True)

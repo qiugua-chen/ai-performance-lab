@@ -229,7 +229,7 @@ def evaluate_metrics(
     metrics: PerformanceMetrics,
     spec: TestSpec,
 ) -> EvaluationResult:
-    """Evaluate validated metrics against one Test Spec."""
+    """依据一份测试规格评估已校验的指标。"""
 
     validity_checks = _validity_checks(
         metrics,

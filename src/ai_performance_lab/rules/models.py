@@ -13,7 +13,7 @@ class EvaluationStatus(str, Enum):
 
 @dataclass(frozen=True)
 class RuleCheck:
-    """Result of one deterministic rule check."""
+    """单项确定性规则的检查结果。"""
 
     name: str
     category: str
@@ -26,7 +26,7 @@ class RuleCheck:
 
 @dataclass(frozen=True)
 class EvaluationResult:
-    """Final deterministic evaluation result."""
+    """最终的确定性评估结果。"""
 
     status: EvaluationStatus
     checks: tuple[RuleCheck, ...]

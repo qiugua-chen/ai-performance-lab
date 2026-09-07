@@ -21,19 +21,19 @@ REQUIRED_COLUMNS = frozenset(
 
 
 class JTLParseError(RuntimeError):
-    """Base exception for JTL parsing failures."""
+    """JTL 解析失败的异常基类。"""
 
 
 class JTLNotFoundError(JTLParseError):
-    """Raised when the requested JTL file does not exist."""
+    """指定的 JTL 文件不存在时抛出此异常。"""
 
 
 class JTLEmptyError(JTLParseError):
-    """Raised when a JTL file contains no CSV header."""
+    """JTL 文件不含 CSV 表头时抛出此异常。"""
 
 
 class JTLCorruptError(JTLParseError):
-    """Raised when the JTL structure or sample data is invalid."""
+    """JTL 结构或样本数据无效时抛出此异常。"""
 
 
 def _parse_non_negative_integer(
@@ -109,7 +109,7 @@ def _validate_header(
 
 
 def parse_jtl(path: str | Path) -> JTLDocument:
-    """Parse and validate one CSV JTL file."""
+    """解析并校验一个 CSV 格式的 JTL 文件。"""
 
     source_path = Path(path).resolve()
 

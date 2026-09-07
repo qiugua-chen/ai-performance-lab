@@ -16,24 +16,24 @@ RUN_ID_PATTERN = re.compile(
 
 
 class RunArtifactError(RuntimeError):
-    """Base exception for Run identity and artifact failures."""
+    """运行标识及产物处理失败的异常基类。"""
 
 
 class RunDirectoryExistsError(RunArtifactError):
-    """Raised when a Run directory already exists."""
+    """运行目录已存在时抛出此异常。"""
 
 
 class RunArtifactExistsError(RunArtifactError):
-    """Raised when an artifact would be overwritten."""
+    """操作将覆盖已有产物时抛出此异常。"""
 
 
 class RunSourceNotFoundError(RunArtifactError):
-    """Raised when a source artifact does not exist."""
+    """输入源文件不存在时抛出此异常。"""
 
 
 @dataclass(frozen=True)
 class RunArtifacts:
-    """Paths belonging exclusively to one performance Run."""
+    """仅属于某一次性能测试运行的路径集合。"""
 
     run_id: str
     created_at_utc: str
@@ -52,7 +52,7 @@ def generate_run_id(
     now: datetime | None = None,
     suffix: str | None = None,
 ) -> str:
-    """Generate a sortable and collision-resistant Run ID."""
+    """生成可排序且碰撞概率低的运行标识。"""
 
     instant = now or datetime.now(timezone.utc)
 
@@ -75,7 +75,7 @@ def create_run_artifacts(
     runs_root: str | Path = "runs",
     run_id: str | None = None,
 ) -> RunArtifacts:
-    """Atomically create an isolated directory for one Run."""
+    """以原子方式为一次运行创建独立目录。"""
 
     created_at = datetime.now(timezone.utc)
     selected_run_id = run_id or generate_run_id(created_at)
@@ -117,7 +117,7 @@ def _copy_file_without_overwrite(
     source: str | Path,
     destination: Path,
 ) -> None:
-    """Copy one file while refusing to replace an existing destination."""
+    """复制单个文件；若目标文件已存在，则拒绝覆盖。"""
 
     source_path = Path(source).resolve()
 
@@ -145,7 +145,7 @@ def stage_run_inputs(
     test_plan_source: str | Path,
     result_properties_source: str | Path,
 ) -> None:
-    """Copy the exact execution inputs into the Run directory."""
+    """将执行输入原样复制到运行目录。"""
 
     _copy_file_without_overwrite(
         test_spec_source,
@@ -166,7 +166,7 @@ def write_run_manifest(
     status: str,
     details: dict[str, Any] | None = None,
 ) -> None:
-    """Write the final immutable metadata file for one Run."""
+    """写入运行元数据文件；若文件已存在，则拒绝覆盖。"""
 
     manifest = {
         "schema_version": "1.0",

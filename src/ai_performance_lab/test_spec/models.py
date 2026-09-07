@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
 
 class ContractModel(BaseModel):
-    """Base model for strict Test Spec validation."""
+    """严格校验测试规格的模型基类。"""
 
     model_config = ConfigDict(
         extra="forbid",
@@ -14,14 +14,14 @@ class ContractModel(BaseModel):
 
 
 class RequestSpec(ContractModel):
-    """Describe the HTTP request under test."""
+    """描述被测 HTTP 请求。"""
 
     method: Literal["GET"]
     url: HttpUrl
 
 
 class LoadSpec(ContractModel):
-    """Describe the deterministic M0 load model."""
+    """描述 M0 的线程数、Ramp-up 时间和执行时长。"""
 
     threads: int = Field(ge=1, le=1000)
     ramp_up_seconds: int = Field(ge=0, le=3600)
@@ -38,7 +38,7 @@ class LoadSpec(ContractModel):
 
 
 class AcceptanceSpec(ContractModel):
-    """Describe deterministic acceptance thresholds."""
+    """描述性能验收阈值。"""
 
     min_rps: float = Field(gt=0)
     min_samples: int = Field(ge=1)
@@ -47,7 +47,7 @@ class AcceptanceSpec(ContractModel):
 
 
 class TestSpec(ContractModel):
-    """Top-level M0 performance test input contract."""
+    """M0 性能测试的顶层输入模型。"""
 
     version: Literal["1.0"]
     name: str = Field(

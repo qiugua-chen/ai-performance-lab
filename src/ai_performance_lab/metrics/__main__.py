@@ -20,16 +20,16 @@ from ai_performance_lab.metrics import (
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Calculate deterministic metrics from one CSV JTL."
+        description="根据一个 CSV 格式的 JTL 文件计算性能指标。"
     )
 
     parser.add_argument(
         "jtl_path",
-        help="Path to the validated CSV JTL file.",
+        help="已校验的 CSV 格式 JTL 文件路径。",
     )
     parser.add_argument(
         "--output",
-        help="Optional new path for metrics.json.",
+        help="可选的 metrics.json 输出路径，目标文件必须尚不存在。",
     )
 
     return parser
