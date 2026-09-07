@@ -1,0 +1,17 @@
+version: "1.0"
+name: "fixed-metrics-invalid"
+
+request:
+  method: "GET"
+  url: "http://127.0.0.1:8001/api/normal"
+
+load:
+  threads: 1
+  ramp_up_seconds: 1
+  duration_seconds: 10
+
+acceptance:
+  min_rps: 0.1
+  min_samples: 11
+  p95_ms: 2000
+  success_rate: 0.5
